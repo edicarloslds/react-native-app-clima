@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "81BEC72B9130285138B542076F3FC668"
+               BlueprintIdentifier = "08326F310215BB01EAD15276BE374B2F"
                BuildableName = "libPods-appclima-tvOS.a"
                BlueprintName = "Pods-appclima-tvOS"
                ReferencedContainer = "container:Pods.xcodeproj">

@@ -5,15 +5,16 @@ import {
   ToastAndroid,
   ActivityIndicator,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import Weather from '../../components/Weather';
-import {weatherConditions} from '../../utils/WeatherConditions';
+import Weather from '@components/Weather';
+import {weatherConditions} from '@utils/WeatherConditions';
 
 import {Container} from './styles';
-import {API_KEY} from '../../utils/OpenWeatherMap'; //TODO: move to .env
+import {API_KEY} from '@utils/OpenWeatherMap'; //TODO: move to .env
 
 export default class Main extends Component {
   state = {
@@ -30,36 +31,38 @@ export default class Main extends Component {
   }
 
   getCurrentWeather = async () => {
+    this.setState({isLoading: true});
+
     const hasLocationPermission = await this.hasLocationPermission();
     if (!hasLocationPermission) {
       return;
     }
 
-    this.setState({isLoading: true});
-
     // get user current localion
     Geolocation.getCurrentPosition(
       position => {
+        console.log('position', position);
         this.fetchWeatherData(
           position.coords.latitude,
           position.coords.longitude,
         );
       },
       error => {
-        this.setState({
-          error: `Erro ao exibir os dados do clima: ${error}`,
-        });
+        this.setState({isLoading: false});
+        Alert.alert('Erro ao exibir o clima', error.message);
       },
+      {enableHighAccuracy: true, timeout: 10000, maximumAge: 3000},
     );
   };
 
   // get weather data from openweathermap API
-  fetchWeatherData(lat = 25, lon = 25) {
+  fetchWeatherData(lat, lon) {
     fetch(
       `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${API_KEY}&units=metric&lang=pt_br`,
     )
       .then(res => res.json())
       .then(data => {
+        console.log('data', data);
         this.setState({
           isLoading: false,
           temperature: data.main.temp,
@@ -120,8 +123,10 @@ export default class Main extends Component {
     } = this.state;
 
     // This will be associated data from API with pre-defining weather conditions
-    const weatherColor = weather ? weatherConditions[weather].color : null;
-    const weatherIcon = weather ? weatherConditions[weather].icon : '';
+    const weatherColor = weather ? weatherConditions[weather].color : '#92A0A4';
+    const weatherIcon = weather
+      ? weatherConditions[weather].icon
+      : 'cloud-off-outline';
 
     return (
       <Container weatherColor={weatherColor}>

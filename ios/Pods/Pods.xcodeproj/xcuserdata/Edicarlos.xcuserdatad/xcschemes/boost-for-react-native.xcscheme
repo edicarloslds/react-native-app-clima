@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "66641B93FAF80FF325B2D7B4AD85056F"
+               BlueprintIdentifier = "ED2506AE7DE35D654F61254441EA7155"
                BuildableName = "boost-for-react-native"
                BlueprintName = "boost-for-react-native"
                ReferencedContainer = "container:Pods.xcodeproj">

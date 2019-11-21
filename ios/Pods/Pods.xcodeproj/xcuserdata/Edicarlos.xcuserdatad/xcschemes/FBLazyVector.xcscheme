@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1CCF1D06CCFE0D0AB787DF0923C94D79"
+               BlueprintIdentifier = "8CC4EAA817AA86310D1900F1DAB3580F"
                BuildableName = "FBLazyVector"
                BlueprintName = "FBLazyVector"
                ReferencedContainer = "container:Pods.xcodeproj">

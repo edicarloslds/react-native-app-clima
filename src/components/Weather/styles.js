@@ -22,7 +22,7 @@ export const Body = styled.View`
 `;
 
 export const Title = styled.Text`
-  fontSize: 48
+  fontSize: 35
   color: #fff
 `;
 
