@@ -11,7 +11,7 @@ import Weather from '../../components/Weather';
 import {weatherConditions} from '../../utils/WeatherConditions';
 
 import {Container} from './styles';
-import {API_KEY} from '../../utils/OpenWeatherMap';
+import {API_KEY} from '../../utils/OpenWeatherMap'; //TODO: move to .env
 
 export default class Main extends Component {
   state = {
@@ -19,6 +19,7 @@ export default class Main extends Component {
     isLoading: true,
     temperature: 0,
     weather: null,
+    description: '',
     localName: '',
   };
 
@@ -29,6 +30,7 @@ export default class Main extends Component {
       return;
     }
 
+    // get user current localion
     Geolocation.getCurrentPosition(
       position => {
         this.fetchWeatherData(
@@ -47,15 +49,15 @@ export default class Main extends Component {
   // get weather data from openweathermap API
   fetchWeatherData(lat = 25, lon = 25) {
     fetch(
-      `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${API_KEY}&units=metric`,
+      `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${API_KEY}&units=metric&lang=pt_br`,
     )
       .then(res => res.json())
       .then(data => {
-        console.log(data);
         this.setState({
           isLoading: false,
           temperature: data.main.temp,
           weather: data.weather[0].main,
+          description: data.weather[0].description,
           localName: data.name,
         });
       });
@@ -102,9 +104,16 @@ export default class Main extends Component {
   };
 
   render() {
-    const {isLoading, temperature, weather, localName} = this.state;
+    const {
+      isLoading,
+      temperature,
+      weather,
+      localName,
+      description,
+    } = this.state;
+
+    // This will be associated data from API with pre-defining weather conditions
     const weatherColor = weather ? weatherConditions[weather].color : null;
-    const weatherTitle = weather ? weatherConditions[weather].title : '';
     const weatherIcon = weather ? weatherConditions[weather].icon : '';
 
     return (
@@ -113,7 +122,7 @@ export default class Main extends Component {
           <ActivityIndicator size="large" color="#282C34" />
         ) : (
           <Weather
-            weatherTitle={weatherTitle}
+            description={description}
             temperature={temperature.toFixed(0)}
             weatherIcon={weatherIcon}
             localName={localName}

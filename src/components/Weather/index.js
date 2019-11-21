@@ -5,7 +5,7 @@ import {Container, Header, Body, TempText, Title, Subtitle} from './styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function Weather({
-  weatherTitle,
+  description,
   temperature,
   weatherIcon,
   localName,
@@ -18,7 +18,7 @@ export default function Weather({
       </Header>
       <Body>
         <Title>{localName}</Title>
-        <Subtitle>{weatherTitle}</Subtitle>
+        <Subtitle>{description}</Subtitle>
       </Body>
     </Container>
   );
