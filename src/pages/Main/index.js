@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Reactotron from 'reactotron-react-native';
 
 import Weather from '@components/Weather';
 import {weatherConditions} from '@utils/WeatherConditions';
@@ -17,17 +18,24 @@ import {Container} from './styles';
 import {API_KEY} from '@utils/OpenWeatherMap'; //TODO: move to .env
 
 export default class Main extends Component {
+  watchID = null;
+
   state = {
-    location: null,
+    location: {},
     isLoading: true,
     temperature: 0,
     weather: null,
     description: '',
     localName: '',
+    lastPosition: {},
   };
 
   componentDidMount() {
     this.getCurrentWeather();
+  }
+
+  componentWillUnmount() {
+    Geolocation.clearWatch(this.watchID);
   }
 
   getCurrentWeather = async () => {
@@ -41,7 +49,7 @@ export default class Main extends Component {
     // get user current localion
     Geolocation.getCurrentPosition(
       position => {
-        console.log('position', position);
+        Reactotron.log(position);
         this.fetchWeatherData(
           position.coords.latitude,
           position.coords.longitude,
@@ -49,11 +57,34 @@ export default class Main extends Component {
       },
       error => {
         this.setState({isLoading: false});
+        Reactotron.error(error.message);
         Alert.alert('Erro ao exibir o clima', error.message);
       },
-      {enableHighAccuracy: true, timeout: 10000, maximumAge: 3000},
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
+    );
+
+    // update position whenever the location changes
+    this.watchID = Geolocation.watchPosition(lastPosition => {
+      this.setState({lastPosition});
+      Reactotron.log(lastPosition);
+    });
+  };
+
+  // get weather data with last known position
+  getLastPosition = () => {
+    const {lastPosition} = this.state;
+
+    this.setState({isLoading: true});
+    this.fetchWeatherData(
+      lastPosition.coords.latitude,
+      lastPosition.coords.longitude,
     );
   };
+
+  // stops watching for device location changes
+  clearWatch() {
+    Geolocation.clearWatch(this.watchID);
+  }
 
   // get weather data from openweathermap API
   fetchWeatherData(lat, lon) {
@@ -62,7 +93,7 @@ export default class Main extends Component {
     )
       .then(res => res.json())
       .then(data => {
-        console.log('data', data);
+        Reactotron.log(data);
         this.setState({
           isLoading: false,
           temperature: data.main.temp,
@@ -123,7 +154,7 @@ export default class Main extends Component {
     } = this.state;
 
     // This will be associated data from API with pre-defining weather conditions
-    const weatherColor = weather ? weatherConditions[weather].color : '#92A0A4';
+    const weatherColor = weather ? weatherConditions[weather].color : '#78909C';
     const weatherIcon = weather
       ? weatherConditions[weather].icon
       : 'cloud-off-outline';
@@ -131,7 +162,7 @@ export default class Main extends Component {
     return (
       <Container weatherColor={weatherColor}>
         {isLoading ? (
-          <ActivityIndicator size="large" color="#282C34" />
+          <ActivityIndicator size="large" color="#fff" />
         ) : (
           <>
             <Weather
@@ -140,7 +171,7 @@ export default class Main extends Component {
               weatherIcon={weatherIcon}
               localName={localName}
             />
-            <TouchableOpacity onPress={this.getCurrentWeather}>
+            <TouchableOpacity onPress={this.getLastPosition}>
               <Icon size={48} name="refresh" color={'#fff'} />
             </TouchableOpacity>
           </>
