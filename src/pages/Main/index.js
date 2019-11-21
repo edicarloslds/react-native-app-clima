@@ -4,8 +4,10 @@ import {
   PermissionsAndroid,
   ToastAndroid,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Weather from '../../components/Weather';
 import {weatherConditions} from '../../utils/WeatherConditions';
@@ -23,12 +25,17 @@ export default class Main extends Component {
     localName: '',
   };
 
-  async componentDidMount() {
-    const hasLocationPermission = await this.hasLocationPermission();
+  componentDidMount() {
+    this.getCurrentWeather();
+  }
 
+  getCurrentWeather = async () => {
+    const hasLocationPermission = await this.hasLocationPermission();
     if (!hasLocationPermission) {
       return;
     }
+
+    this.setState({isLoading: true});
 
     // get user current localion
     Geolocation.getCurrentPosition(
@@ -44,7 +51,7 @@ export default class Main extends Component {
         });
       },
     );
-  }
+  };
 
   // get weather data from openweathermap API
   fetchWeatherData(lat = 25, lon = 25) {
@@ -121,12 +128,17 @@ export default class Main extends Component {
         {isLoading ? (
           <ActivityIndicator size="large" color="#282C34" />
         ) : (
-          <Weather
-            description={description}
-            temperature={temperature.toFixed(0)}
-            weatherIcon={weatherIcon}
-            localName={localName}
-          />
+          <>
+            <Weather
+              description={description}
+              temperature={temperature.toFixed(0)}
+              weatherIcon={weatherIcon}
+              localName={localName}
+            />
+            <TouchableOpacity onPress={this.getCurrentWeather}>
+              <Icon size={48} name="refresh" color={'#fff'} />
+            </TouchableOpacity>
+          </>
         )}
       </Container>
     );
