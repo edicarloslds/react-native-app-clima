@@ -1,22 +1,67 @@
 import React, {Component} from 'react';
 import {
-  Alert,
-  Text,
   Platform,
   PermissionsAndroid,
   ToastAndroid,
-  View,
+  ActivityIndicator,
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 
+import Weather from '../../components/Weather';
+import {weatherConditions} from '../../utils/WeatherConditions';
+
 import {Container} from './styles';
+import {API_KEY} from '../../utils/OpenWeatherMap';
 
 export default class Main extends Component {
   state = {
     location: null,
     isLoading: true,
+    temperature: 0,
+    weather: null,
+    localName: '',
   };
 
+  async componentDidMount() {
+    const hasLocationPermission = await this.hasLocationPermission();
+
+    if (!hasLocationPermission) {
+      return;
+    }
+
+    Geolocation.getCurrentPosition(
+      position => {
+        this.fetchWeatherData(
+          position.coords.latitude,
+          position.coords.longitude,
+        );
+      },
+      error => {
+        this.setState({
+          error: `Erro ao exibir os dados do clima: ${error}`,
+        });
+      },
+    );
+  }
+
+  // get weather data from openweathermap API
+  fetchWeatherData(lat = 25, lon = 25) {
+    fetch(
+      `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${API_KEY}&units=metric`,
+    )
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+        this.setState({
+          isLoading: false,
+          temperature: data.main.temp,
+          weather: data.weather[0].main,
+          localName: data.name,
+        });
+      });
+  }
+
+  // check if location permission in Android is already granted by the user
   hasLocationPermission = async () => {
     if (
       Platform.OS === 'ios' ||
@@ -56,42 +101,23 @@ export default class Main extends Component {
     return false;
   };
 
-  findCoordinates = async () => {
-    const hasLocationPermission = await this.hasLocationPermission();
-
-    if (!hasLocationPermission) {
-      return;
-    }
-
-    Geolocation.getCurrentPosition(
-      position => {
-        const location = JSON.stringify(position);
-        this.setState({location});
-      },
-      error => {
-        Alert.alert(error.message);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 15000,
-        maximumAge: 10000,
-        distanceFilter: 50,
-        forceRequestLocation: true,
-      },
-    );
-  };
-
   render() {
-    const {isLoading} = this.state;
+    const {isLoading, temperature, weather, localName} = this.state;
+    const weatherColor = weather ? weatherConditions[weather].color : null;
+    const weatherTitle = weather ? weatherConditions[weather].title : '';
+    const weatherIcon = weather ? weatherConditions[weather].icon : '';
 
     return (
-      <Container>
+      <Container weatherColor={weatherColor}>
         {isLoading ? (
-          <Text>Fetching The Weather</Text>
+          <ActivityIndicator size="large" color="#282C34" />
         ) : (
-          <View>
-            <Text>Minimalist Weather App</Text>
-          </View>
+          <Weather
+            weatherTitle={weatherTitle}
+            temperature={temperature.toFixed(0)}
+            weatherIcon={weatherIcon}
+            localName={localName}
+          />
         )}
       </Container>
     );

@@ -1,12 +1,25 @@
 import React from 'react';
 
-import {Container, Header, Body} from './styles';
+import {Container, Header, Body, TempText, Title, Subtitle} from './styles';
 
-export default function Weather() {
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+export default function Weather({
+  weatherTitle,
+  temperature,
+  weatherIcon,
+  localName,
+}) {
   return (
     <Container>
-      <Header />
-      <Body />
+      <Header>
+        <Icon size={150} name={weatherIcon} color={'#fff'} />
+        <TempText>{temperature}˚C</TempText>
+      </Header>
+      <Body>
+        <Title>{localName}</Title>
+        <Subtitle>{weatherTitle}</Subtitle>
+      </Body>
     </Container>
   );
 }

@@ -1,8 +1,9 @@
 import styled from 'styled-components/native';
 
-export const Container = styled.View`
+export const Container = styled.SafeAreaView`
     flex: 1
     justifyContent: center
     alignItems: center
-    backgroundColor: #F5FCFF
+    backgroundColor: ${props =>
+      props.weatherColor ? props.weatherColor : '#fff'};
 `;
