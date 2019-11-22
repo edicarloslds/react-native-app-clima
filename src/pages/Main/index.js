@@ -39,8 +39,6 @@ export default class Main extends Component {
   }
 
   getCurrentWeather = async () => {
-    this.setState({isLoading: true});
-
     const hasLocationPermission = await this.hasLocationPermission();
     if (!hasLocationPermission) {
       return;

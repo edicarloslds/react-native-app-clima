@@ -8,6 +8,8 @@ export const Header = styled.View`
   flex: 1
   alignItems: center
   justifyContent: center
+  paddingTop: 10
+  paddingBottom: 10
 `;
 
 export const TempText = styled.Text`
