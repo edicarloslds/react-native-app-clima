@@ -1,16 +1,12 @@
 import styled from 'styled-components/native';
 
 export const Container = styled.View`
-  flex: 1;
-`;
-
-export const Header = styled.View`
   flex: 1
   alignItems: center
   justifyContent: center
-  paddingTop: 10
-  paddingBottom: 10
 `;
+
+export const Header = styled.View``;
 
 export const TempText = styled.Text`
   fontSize: 48
@@ -18,9 +14,7 @@ export const TempText = styled.Text`
 `;
 
 export const Body = styled.View`
-  flex: 2
-  justifyContent: flex-start
-  marginTop: 40
+  marginTop: 30;
 `;
 
 export const Title = styled.Text`
