@@ -7,7 +7,7 @@ The following packages are required to run this application example:
 * [Node.js (>=8.x.x)](https://nodejs.org)
 * react-native CLI tool with a version equal to or above 2.0.1.
 
-![Screenshot](screenshot.png)
+![Screenshot](screenshot.png){:height="50%" width="50%"}
 
 ## Setup
 
