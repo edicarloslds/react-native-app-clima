@@ -6,7 +6,10 @@ export const Container = styled.View`
   justifyContent: center
 `;
 
-export const Header = styled.View``;
+export const Header = styled.View`
+  marginTop: 0
+  alignItems: center
+`;
 
 export const TempText = styled.Text`
   fontSize: 48
@@ -14,7 +17,8 @@ export const TempText = styled.Text`
 `;
 
 export const Body = styled.View`
-  marginTop: 30;
+  marginTop: 30
+  alignItems: center
 `;
 
 export const Title = styled.Text`
