@@ -7,8 +7,11 @@ The following packages are required to run this application example:
 * [Node.js (>=8.x.x)](https://nodejs.org)
 * react-native CLI tool with a version equal to or above 2.0.1.
 
-<img src="screenshot1.png" width="200">
-<img src="screenshot2.png" width="200">
+## Screen Shots
+<p float="left">
+    <img src="screenshot1.png" width="200">
+    <img src="screenshot2.png" width="200">
+</p>
 
 ## Setup
 
