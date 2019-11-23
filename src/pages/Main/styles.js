@@ -1,9 +1,12 @@
 import styled from 'styled-components/native';
+import LinearGradient from 'react-native-linear-gradient';
 
 export const Container = styled.SafeAreaView`
-    flex: 1
-    justifyContent: center
-    alignItems: center
-    backgroundColor: ${props =>
-      props.weatherColor ? props.weatherColor : '#fff'};
+  flex: 1
+  alignItems: center
+  justifyContent: center
+`;
+
+export const GradientContainer = styled(LinearGradient)`
+  flex: 1;
 `;

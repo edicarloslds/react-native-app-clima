@@ -1,34 +1,34 @@
 export const weatherConditions = {
   Rain: {
-    color: '#CDDFE3',
+    colors: ['#4CD1C1', '#A3DAD2'],
     icon: 'weather-rainy',
   },
   Clear: {
-    color: '#FBCC9E',
+    colors: ['#FA9F46', '#FED667'],
     icon: 'weather-sunny',
   },
   Thunderstorm: {
-    color: '#2D3756',
+    colors: ['#697ED9', '#7F9EE7'],
     icon: 'weather-lightning',
   },
   Clouds: {
-    color: '#BDBDBD',
+    colors: ['#5DD4FE', '#A3DFFD'],
     icon: 'weather-cloudy',
   },
   Snow: {
-    color: '#00d2ff',
+    colors: ['#3593E4', '#90B9FF'],
     icon: 'weather-snowy',
   },
   Drizzle: {
-    color: '#076585',
+    colors: ['#1BB6C4', '#92E4EC'],
     icon: 'weather-hail',
   },
   Haze: {
-    color: '#66A6FF',
+    colors: ['#717375', '#D0D1D1'],
     icon: 'weather-hail',
   },
   Mist: {
-    color: '#3CD3AD',
+    colors: ['#5F7FAA', '#C2D3E8'],
     icon: 'weather-fog',
   },
 };

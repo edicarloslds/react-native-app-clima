@@ -14,7 +14,7 @@ import Reactotron from 'reactotron-react-native';
 import Weather from '@components/Weather';
 import {weatherConditions} from '@utils/WeatherConditions';
 
-import {Container} from './styles';
+import {Container, GradientContainer} from './styles';
 import {API_KEY} from '@utils/OpenWeatherMap'; //TODO: move to .env
 
 export default class Main extends Component {
@@ -71,6 +71,11 @@ export default class Main extends Component {
   // get weather data with last known position
   getLastPosition = () => {
     const {lastPosition} = this.state;
+
+    // check if location exists
+    if (!lastPosition.coords) {
+      return;
+    }
 
     this.setState({isLoading: true});
     this.fetchWeatherData(
@@ -151,30 +156,34 @@ export default class Main extends Component {
       description,
     } = this.state;
 
-    // This will be associated data from API with pre-defining weather conditions
-    const weatherColor = weather ? weatherConditions[weather].color : '#78909C';
+    // This will be associated data from API with pre-defining weather style
+    const weatherColors = weather
+      ? weatherConditions[weather].colors
+      : ['#4B5866', '#4D4D4C'];
     const weatherIcon = weather
       ? weatherConditions[weather].icon
       : 'cloud-off-outline';
 
     return (
-      <Container weatherColor={weatherColor}>
-        {isLoading ? (
-          <ActivityIndicator size="large" color="#fff" />
-        ) : (
-          <>
-            <Weather
-              description={description}
-              temperature={temperature.toFixed(0)}
-              weatherIcon={weatherIcon}
-              localName={localName}
-            />
-            <TouchableOpacity onPress={this.getLastPosition}>
-              <Icon size={48} name="refresh" color={'#fff'} />
-            </TouchableOpacity>
-          </>
-        )}
-      </Container>
+      <GradientContainer colors={weatherColors}>
+        <Container>
+          {isLoading ? (
+            <ActivityIndicator size="large" color="#fff" />
+          ) : (
+            <>
+              <Weather
+                description={description}
+                temperature={temperature.toFixed(0)}
+                weatherIcon={weatherIcon}
+                localName={localName}
+              />
+              <TouchableOpacity onPress={this.getLastPosition}>
+                <Icon size={48} name="refresh" color={'#fff'} />
+              </TouchableOpacity>
+            </>
+          )}
+        </Container>
+      </GradientContainer>
     );
   }
 }
