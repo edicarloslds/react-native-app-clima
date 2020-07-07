@@ -16,7 +16,7 @@ The following packages are required to run this application example:
 Primeiro, instale o [Yarn](https://yarnpkg.com):
 
 ```sh
-# no MacOS
+# MacOS
 brew install yarn
 ```
 
